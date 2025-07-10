@@ -1,0 +1,28 @@
+name: ShareIt API Tests
+
+on:
+  pull_request:
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: mvn package -DskipTests
+
+      - name: Start Spring Boot app
+        run: |
+          nohup java -jar target/later-spring-boot-1.0-SNAPSHOT.jar &
+          echo "Waiting for app to start..."
+          timeout 120 bash -c 'while ! curl -s http://localhost:8080/actuator/health >/dev/null; do sleep 1; done'
+
+      - name: Run API tests
+        run: mvn test
