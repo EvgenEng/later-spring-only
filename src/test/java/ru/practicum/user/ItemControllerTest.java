@@ -14,7 +14,6 @@ import ru.practicum.item.ItemDto;
 import ru.practicum.item.ItemService;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
